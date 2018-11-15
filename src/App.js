@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Controls from './components/Controls';
 import PlayerList from './components/PlayersList';
+import Popup from 'react-popup';
 import './App.css';
 
 export default class App extends Component {
@@ -15,12 +16,21 @@ export default class App extends Component {
         life: 20,
         color: '#ff5722',
         active: false,
-        damage: {
-          // playerNumber: {
-          //   name: '',
-          //   dealt: 0
-          // }
-        }
+        turns: [
+          // {
+          //   damage: {  
+          //     playerNumber: {
+          //       name: '',
+          //       lifeAffect: {
+          //         playerNumber: {
+          //           plus: 0
+          //           minus: 0
+          //         } // player
+          //       } // lifeAffect
+          //     } // player
+          //   } //damage
+          // } // turn
+        ]
       }
     };
     
@@ -88,6 +98,10 @@ export default class App extends Component {
   }
   
   controlLife(action, i) {
+    if (this.state.players.every(o => o.active === false)) {
+      Popup.alert('You need to choose an active player');
+      return;
+    }
     switch(action) {
       case 'minus':
         this.minusLife(i);
@@ -153,6 +167,7 @@ export default class App extends Component {
   render() {
     return (
       <main className="main-container">
+        <Popup />
         <Controls 
           controlPlayers={this.controlPlayers.bind(this)} 
         />
