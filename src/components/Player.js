@@ -17,14 +17,14 @@ export default class Player extends Component {
   minus(e) {
     e.stopPropagation();
 
-    const i = this.props.player.number-1;
+    const i = this.props.player.number;
     this.props.controlLife('minus', i);
   }
   
   plus(e) {
     e.stopPropagation();
     
-    const i = this.props.player.number-1;
+    const i = this.props.player.number;
     this.props.controlLife('plus', i);
   }
   
@@ -37,11 +37,11 @@ export default class Player extends Component {
   }
   
   setName(e) {
-    this.props.setName(e.target.value, this.props.player.number-1);
+    this.props.setName(e.target.value, this.props.player.number);
   }
   
   renderName() {
-    const name = this.props.player.name ? this.props.player.name : 'Player ' + this.props.player.number;
+    const name = this.props.player.name ? this.props.player.name : 'Player ' + (this.props.player.number + 1);
     
     if (this.state.isEditingName) {
       return (
@@ -64,7 +64,8 @@ export default class Player extends Component {
   }
 
   setLife(e) {
-    this.props.setLife(e.target.value, this.props.player.number-1);
+    this.setEditLife(false, e);
+    this.props.setLife(e.target.value, this.props.player.number);
   }
   
   renderLife() {    
@@ -74,9 +75,9 @@ export default class Player extends Component {
           className="playerLife" 
           defaultValue={this.props.player.life} 
           type="number" 
-          onChange={this.setLife.bind(this)} 
+          onBlur={this.setLife.bind(this)} 
           //onKeyPress={this.enterLife.bind(this)} 
-          onBlur={this.setEditLife.bind(this, false)} 
+          //onBlur={this.setEditLife.bind(this, false)} 
           autoFocus 
         />
       )
@@ -99,7 +100,7 @@ export default class Player extends Component {
   setColor(color, e) {
     e.stopPropagation();
 
-    this.props.setColor(color.hex, this.props.player.number-1);
+    this.props.setColor(color.hex, this.props.player.number);
     this.setEditColor(false, e);
   }
 
@@ -124,7 +125,7 @@ export default class Player extends Component {
   }
 
   setActive() {
-    this.props.setActive(this.props.player.number-1);
+    this.props.setActive(this.props.player.number);
   }
 
   render() {
@@ -134,7 +135,7 @@ export default class Player extends Component {
     };
 
     return (
-      <li className="flex-item" style={playerStyle} onClick={this.setActive.bind(this)}>
+      <li className="flex-item" style={playerStyle}>
         {this.renderName()}
         {this.renderLife()}
         {this.renderColor()}
@@ -143,6 +144,9 @@ export default class Player extends Component {
         </button>
         <button onClick={this.plus.bind(this)}>
           +
+        </button>
+        <button onClick={this.setActive.bind(this)}>
+          Active
         </button>
       </li>
     );

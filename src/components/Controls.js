@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
 
 export default class Controls extends Component { 
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: true
-    }
-  }
-
   toggle() {
-    this.setState({
-      show: this.state.show ? false : true
-    })
+    this.props.toggleControls();
   }
 
   minus() {
@@ -23,14 +14,10 @@ export default class Controls extends Component {
   }
   
   render() {
-    const controlsStyle = {
-      display: this.state.show ? 'block': 'none'
-    };
-
     return (
-      <div className="controls" style={controlsStyle}>
+      <div className="controls" style={this.props.style}>
         <div className="controls-container">
-          <h4>Number of Players</h4>
+          <h4>Set the # of Players</h4>
           <button onClick={this.minus.bind(this)}>
             -
           </button>
@@ -38,7 +25,7 @@ export default class Controls extends Component {
             +
           </button>
           <button style={{float: 'right'}} onClick={this.toggle.bind(this)}>
-            &times;
+            Start
           </button>
         </div>
       </div>
