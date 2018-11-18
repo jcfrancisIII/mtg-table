@@ -15,22 +15,16 @@ export default class Player extends Component {
   }
   
   minus(e) {
-    e.stopPropagation();
-
     const i = this.props.player.number;
     this.props.controlLife('minus', i);
   }
   
-  plus(e) {
-    e.stopPropagation();
-    
+  plus(e) {    
     const i = this.props.player.number;
     this.props.controlLife('plus', i);
   }
   
   setEditName(isEditingName, e)  {
-    e.stopPropagation();
-
     this.setState({
       isEditingName
     });
@@ -56,8 +50,6 @@ export default class Player extends Component {
   }
 
   setEditLife(isEditingLife, e) {
-    e.stopPropagation();
-
     this.setState({
       isEditingLife
     });

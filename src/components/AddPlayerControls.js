@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-export default class Controls extends Component { 
-  toggle() {
-    this.props.toggleControls();
+export default class AddPlayerControls extends Component { 
+  start() {
+    this.props.start();
   }
 
   minus() {
@@ -15,8 +15,8 @@ export default class Controls extends Component {
   
   render() {
     return (
-      <div className="controls" style={this.props.style}>
-        <div className="controls-container">
+      <div className="player-controls" style={this.props.style}>
+        <div className="player-controls-container">
           <h4>Set the # of Players</h4>
           <button onClick={this.minus.bind(this)}>
             -
@@ -24,7 +24,7 @@ export default class Controls extends Component {
           <button onClick={this.plus.bind(this)}>
             +
           </button>
-          <button style={{float: 'right'}} onClick={this.toggle.bind(this)}>
+          <button style={{float: 'right'}} onClick={this.start.bind(this)}>
             Start
           </button>
         </div>

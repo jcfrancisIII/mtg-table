@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Controls from './components/Controls';
+import AddPlayerControls from './components/AddPlayerControls';
 import PlayerList from './components/PlayersList';
+import TurnControls from './components/TurnControls';
 import Popup from 'react-popup';
 import './App.css';
 
@@ -33,15 +34,40 @@ export default class App extends Component {
       currentTurn: {
         damage: {} // damage
       }, // currentTurn
-      showControls: true
+      showPlayerControls: true,
+      showTurnControls: false
     };
     
   }
 
-  toggleControls() {
+  start() {
+    const players = [...this.state.players];
+    // add damage trackers for each player
+    const playersDmg = {};
+    const playerDmg = initPlayerDmg;
+    // create a lifeEffect obj for each player
+    // reduce returns result to the next call 
+    // {} is initial value
+    const playersLA = players.reduce((map, o) => {
+      map[o.number] = initLifeEffect;
+      return map;
+    }, {});
+
+    // create a damage obj for each player
+    players.forEach((o) => { 
+      playerDmg.name = o.name;
+      playerDmg.lifeEffect = playersLA; // players life effect to this player
+      // set an object containing the 
+      playersDmg[o.number] = playerDmg
+    });
+    
     this.setState((state) => {
       return {
-        showControls: state.showControls ? false : true
+        currentTurn: {
+          damage: playersDmg 
+        },
+        showPlayerControls: false,
+        showTurnControls: true
       }
     });
   }
@@ -61,32 +87,12 @@ export default class App extends Component {
   }
   
   addPlayer() {
-    const players = [...this.state.players, this.state.currentPlayer];
-    const playersDmg = {};
-    const playerDmg = initPlayerDmg;
-    // reduce returns result to the next call 
-    // {} is initial value
-    const playersLA = players.reduce((map, o) => {
-      map[o.number] = initLifeEffect;
-      return map;
-    }, {});
-
-    players.forEach((o) => { 
-      playerDmg.name = o.name;
-      playerDmg.lifeEffect = playersLA; // players life effect to this player
-      // set an object containing the 
-      playersDmg[o.number] = playerDmg
-    });
-
     this.setState((state) => {
       return {
-        players: players,
+        players: [...state.players, state.currentPlayer],
         currentPlayer: {
           ...state.currentPlayer,
           number: state.currentPlayer.number+1
-        },
-        currentTurn: {
-          damage: playersDmg 
         }
       }
     });
@@ -256,19 +262,36 @@ export default class App extends Component {
       }
     });
   }
+
+  nextTurn() {
+    this.setState((state) => {
+      return {
+        turns: [
+          ...state.turns,
+          state.currentTurn
+        ],
+        currentTurn: {
+          damage: {}
+        }
+      }
+    });
+  }
   
   render() {
-    const controlsStyle = {
-      display: this.state.showControls ? 'block': 'none'
+    const playerControlsStyle = {
+      display: this.state.showPlayerControls ? 'block': 'none'
+    };
+    const turnControlsStyle = {
+      display: this.state.showTurnControls ? 'block': 'none'
     };
 
     return (
       <main className="main-container">
         <Popup />
-        <Controls 
+        <AddPlayerControls 
           controlPlayers={this.controlPlayers.bind(this)} 
-          toggleControls={this.toggleControls.bind(this)} 
-          style={controlsStyle}
+          start={this.start.bind(this)} 
+          style={playerControlsStyle}
         />
         <PlayerList 
           players={this.state.players} 
@@ -277,6 +300,10 @@ export default class App extends Component {
           setLife={this.setLife.bind(this)}
           setColor={this.setColor.bind(this)}
           setActive={this.setActive.bind(this)}
+        />
+        <TurnControls
+          nextTurn={this.nextTurn.bind(this)}
+          style={turnControlsStyle}
         />
       </main>
     );
