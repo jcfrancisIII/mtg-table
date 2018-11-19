@@ -37,14 +37,14 @@ export default class Player extends Component {
   renderName() {
     const name = this.props.player.name ? this.props.player.name : 'Player ' + (this.props.player.number + 1);
     
-    if (this.state.isEditingName) {
+    if (this.state.isEditingName && this.props.showPlayerControls ) {
       return (
-        <input className="playerName" defaultValue={name} type="text" onChange={this.setName.bind(this)} onBlur={this.setEditName.bind(this, false)} autoFocus />
+        <input className="player-name" defaultValue={name} type="text" onChange={this.setName.bind(this)} onBlur={this.setEditName.bind(this, false)} autoFocus />
       )
     }
 
     return (
-      <h4 onClick={this.setEditName.bind(this, true)} className="playerName">{name}</h4>
+      <h4 onClick={this.setEditName.bind(this, true)} className="player-name">{name}</h4>
     )
     
   }
@@ -61,10 +61,10 @@ export default class Player extends Component {
   }
   
   renderLife() {    
-    if (this.state.isEditingLife) {
+    if (this.state.isEditingLife && this.props.showLifeControls) {
       return (
         <input 
-          className="playerLife" 
+          className="player-life" 
           defaultValue={this.props.player.life} 
           type="number" 
           onBlur={this.setLife.bind(this)} 
@@ -76,22 +76,18 @@ export default class Player extends Component {
     }
 
     return (
-      <h1 onClick={this.setEditLife.bind(this, true)} className="playerLife">{this.props.player.life}</h1>
+      <h1 onClick={this.setEditLife.bind(this, true)} className="player-life">{this.props.player.life}</h1>
     )
     
   }
 
   setEditColor(isEditingColor, e) {
-    e.stopPropagation();
-
     this.setState({
       isEditingColor
     });
   }
 
   setColor(color, e) {
-    e.stopPropagation();
-
     this.props.setColor(color.hex, this.props.player.number);
     this.setEditColor(false, e);
   }
@@ -100,7 +96,7 @@ export default class Player extends Component {
     if (this.state.isEditingColor) {
       return (
         <CirclePicker
-          className="playerColor"
+          className="player-color"
           width="100%"
           circleSize={18}
           circleSpacing={7}
@@ -112,7 +108,13 @@ export default class Player extends Component {
     }
     
     return (
-      <button className="playerColor" onClick={this.setEditColor.bind(this, true)}>&#x22ee;</button>
+      <button 
+        className="player-color" 
+        onClick={this.setEditColor.bind(this, true)}
+        style={this.props.playerControlsStyle}
+      >
+        &#x22ee;
+      </button>
     )
   }
 
@@ -125,19 +127,33 @@ export default class Player extends Component {
       background: this.props.player.color,
       border: this.props.player.active ? '2px solid #000': '0px solid #000'
     };
-
+    const lifeControlsStyle = {
+      display: this.props.showLifeControls ? 'block': 'none'
+    };
+    const activeControlsStyle = {
+      display: this.props.showPlayerControls ? 'none': 'block'
+    };
     return (
       <li className="flex-item" style={playerStyle}>
         {this.renderName()}
         {this.renderLife()}
         {this.renderColor()}
-        <button onClick={this.minus.bind(this)}>
+        <button 
+          style={lifeControlsStyle}
+          onClick={this.minus.bind(this)}
+        >
           -
         </button>
-        <button onClick={this.plus.bind(this)}>
+        <button 
+          style={lifeControlsStyle}
+          onClick={this.plus.bind(this)}
+        >
           +
         </button>
-        <button onClick={this.setActive.bind(this)}>
+        <button 
+          style={activeControlsStyle}
+          onClick={this.setActive.bind(this)}
+        >
           Active
         </button>
       </li>

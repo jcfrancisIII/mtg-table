@@ -15,6 +15,7 @@
   justify-content: space-around;
   align-items: stretch;
   height: calc(100% - 30px);
+  margin-top: 30px;
 }
 
 .flex-item {
@@ -31,16 +32,16 @@
   min-width: 20%;
 }
 
-.playerName {
+.player-name {
   white-space: nowrap;
   width: 100%; 
 }
 
-.playerLife {
+.player-life {
   width: 100%;  
 }
 
-.playerColor {
+.player-color {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -50,11 +51,18 @@ button {
   cursor: pointer;
 }
 
+.player-controls,
 .turn-controls {
   position: absolute;
-  bottom: 0;
+  top: 0;
   height: 30px;
   width: 100%;
+}
+
+.player-controls h4,
+.turn-controls h4 {
+  display: inline-block;
+  margin: 0 1em;
 }
 
 /* REACT-POPUP */

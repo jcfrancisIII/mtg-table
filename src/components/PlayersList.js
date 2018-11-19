@@ -9,12 +9,16 @@ export default class PlayerList extends Component {
         <Player 
           key={player.number} 
           player={player} 
+
           controlLife={this.props.controlLife} 
           setName={this.props.setName}
           setLife={this.props.setLife}
           setColor={this.props.setColor}
           setActive={this.props.setActive}
-          />
+
+          showPlayerControls={this.props.showPlayerControls}
+          showLifeControls={this.props.showLifeControls}
+        />
       )
     });
   }
