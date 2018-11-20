@@ -259,12 +259,15 @@ export default class App extends Component {
 
   render() {
     const turnControlsStyle = {
-      display: this.state.showTurnControls ? 'block': 'none'
+      display: this.state.showTurnControls && !this.state.showGameCharts ? 'block': 'none'
     };
     const playerControlsStyle = {
-      display: this.state.showPlayerControls ? 'block': 'none'
+      display: this.state.showPlayerControls && !this.state.showGameCharts ? 'block': 'none'
     };
     const showLifeControls = this.state.showTurnControls && typeof this.findActivePlayer(this.state) === 'object' ? true: false;
+    const playerListStyle = {
+      display: !this.state.showGameCharts ? 'flex': 'none'
+    };
 
     return (
       <main className="main-container">
@@ -283,17 +286,19 @@ export default class App extends Component {
         <PlayerList 
           players={this.state.players} 
           controlLife={this.controlLife.bind(this)} 
-          
+
           setName={this.setName.bind(this)}
           setLife={this.setLife.bind(this)}
           setColor={this.setColor.bind(this)}
           setActive={this.setActive.bind(this)}
-
+          
           showPlayerControls={this.state.showPlayerControls}
           showLifeControls={showLifeControls}
+          style={playerListStyle}
         />
         <GameCharts
           gameData={this.state}
+          showGameCharts={this.state.showGameCharts}
         />
       </main>
     );

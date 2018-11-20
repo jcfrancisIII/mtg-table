@@ -65,6 +65,10 @@ button {
   margin: 0 1em;
 }
 
+.chart-wrap {
+    height: 400px;
+}
+
 /* REACT-POPUP */
 
 .mm-popup {

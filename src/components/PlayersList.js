@@ -25,7 +25,7 @@ export default class PlayerList extends Component {
   
   render() {
     return (
-      <ul className="flex-container">
+      <ul className="flex-container" style={this.props.style}>
         {this.renderPlayers()}
       </ul>
     );
