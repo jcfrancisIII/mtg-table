@@ -2,14 +2,47 @@ import React, { Component } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 
 export default class GameCharts extends Component {
-  chartOneData() {
+  // for every player create an effect array
+  // total the effect on other players (plus life, minus life, kill?)
+  // {healing: 0, damage: 0, kill: false}
+  // 
+  totalDamageData() {
+    const players = this.props.gameData.players;
+    const turns = this.props.gameData.turns;
+    players.forEach((thisPlayer, i) => {
+      let thisPlayerNumber = thisPlayer.number;
+      thisPlayer.damage = 0;
+      thisPlayer.healing = 0;
+      thisPlayer.kills = 0;
+      turns.forEach((turn, i) => {
+        for (let affectedPlayerNumber in turn.damageData) {
+          // affectedPlayer is the player who took damage this turn {lifeEffect, player}
+          // affectingPlayer is thisPlayer
+          let affectedPlayer = turn.damageData[affectedPlayerNumber];
+          let affectingPlayer = affectedPlayer.lifeEffect[thisPlayerNumber];
+          thisPlayer.healing += affectingPlayer.healing;
+          thisPlayer.damage += affectingPlayer.damage;
+          thisPlayer.kills = affectingPlayer.kill ? thisPlayer.kills + 1 : thisPlayer.kills;
+        }
+      });
+      return thisPlayer;
+     });
+    return players;
+  }
 
+  healingData() {
+    const data = this.props.gameData.players;
+    // this.props.gameData.reduce((map, o) => {
+    //   map = players;
+    // }, {})
+    return data;
   }
 
   render() {
     return (
       <div className="chart-wrap">
         Charts
+        {console.log(this.totalDamageData())}
         <ResponsiveBar 
           data={[
             {
@@ -82,32 +115,7 @@ export default class GameCharts extends Component {
           labelSkipHeight={12}
           labelTextColor="inherit:darker(1.6)"
           animate={false}
-          motionStiffness={90}
-          motionDamping={15}
-          legends={[
-              {
-                  "dataFrom": "keys",
-                  "anchor": "bottom-right",
-                  "direction": "column",
-                  "justify": false,
-                  "translateX": 120,
-                  "translateY": 0,
-                  "itemsSpacing": 2,
-                  "itemWidth": 100,
-                  "itemHeight": 20,
-                  "itemDirection": "left-to-right",
-                  "itemOpacity": 0.85,
-                  "symbolSize": 20,
-                  "effects": [
-                      {
-                          "on": "hover",
-                          "style": {
-                              "itemOpacity": 1
-                          }
-                      }
-                  ]
-              }
-          ]}
+          keys={["hot dog"]}
         />
       </div>
     );

@@ -6,14 +6,14 @@ import GameCharts from './components/GameCharts';
 import Popup from 'react-popup';
 import './App.css';
 
-const initPlayerDmg = { // set to player number in currentTurn.damage
+const initPlayerDmg = { // set to player number in currentTurn.damageData
   player: {}, 
   lifeEffect: {},
 }; // receiving player
 
-const initLifeEffect = { // set to player number in damage[player number].lifeEffect
-  plus: 0,
-  minus: 0,
+const initLifeEffect = { // set to player number in damageData[player number].lifeEffect
+  healing: 0,
+  damage: 0,
   kill: false,
   player: {}
 }; //active player
@@ -33,7 +33,7 @@ export default class App extends Component {
       },
       turns: [],
       currentTurn: {
-        damage: {} // damage
+        damageData: {} // damage
       }, // currentTurn
       showPlayerControls: true,
       showTurnControls: false,
@@ -48,7 +48,7 @@ export default class App extends Component {
     this.setState((state) => {
       return {
         currentTurn: {
-          damage: playersDmg
+          damageData: playersDmg
         },
         showPlayerControls: false,
         showTurnControls: true
@@ -146,10 +146,10 @@ export default class App extends Component {
     // assign new lifeEffect to the receiving player
     const activePlayer = this.findActivePlayer(this.state);
     const lifeDiff = this.state.players[i].life - newLife;
-    // if lifeDiff > 0 they lost life (minus) 
-    // if lifeDiff < 0 they gained life (plus)
-    const activeLifeEffect = {...this.state.currentTurn.damage[receivingPlayer.number].lifeEffect[activePlayer.number]};
-    lifeDiff > 0 ? activeLifeEffect.minus += Math.abs(lifeDiff) : activeLifeEffect.plus += Math.abs(lifeDiff);
+    // if lifeDiff > 0 they lost life
+    // if lifeDiff < 0 they gained life
+    const activeLifeEffect = {...this.state.currentTurn.damageData[receivingPlayer.number].lifeEffect[activePlayer.number]};
+    lifeDiff > 0 ? activeLifeEffect.damage += Math.abs(lifeDiff) : activeLifeEffect.healing += Math.abs(lifeDiff);
     activeLifeEffect.kill = newLife <= 0 ? true : false;
     activeLifeEffect.player = activePlayer;
 
@@ -164,12 +164,12 @@ export default class App extends Component {
       return {
         players: newPlayers,
         currentTurn: {
-          damage: {
-            ...state.currentTurn.damage,
+          damageData: {
+            ...state.currentTurn.damageData,
             [i]: {
               player: receivingPlayer,
               lifeEffect: {
-                ...state.currentTurn.damage[i].lifeEffect,
+                ...state.currentTurn.damageData[i].lifeEffect,
                 [activePlayer.number]: activeLifeEffect
               }
             }
@@ -218,7 +218,7 @@ export default class App extends Component {
           state.currentTurn
         ],
         currentTurn: {
-          damage: playersDmg
+          damageData: playersDmg
         }
       }
     });
@@ -296,10 +296,7 @@ export default class App extends Component {
           showLifeControls={showLifeControls}
           style={playerListStyle}
         />
-        <GameCharts
-          gameData={this.state}
-          showGameCharts={this.state.showGameCharts}
-        />
+        {this.state.showGameCharts && <GameCharts gameData={this.state} />}
       </main>
     );
   }

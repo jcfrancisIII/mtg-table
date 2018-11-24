@@ -131,7 +131,7 @@ export default class Player extends Component {
       display: this.props.showLifeControls ? 'block': 'none'
     };
     const activeControlsStyle = {
-      display: this.props.showPlayerControls ? 'none': 'block'
+      display: this.props.showPlayerControls || this.props.player.active ? 'none': 'block'
     };
     return (
       <li className="flex-item" style={playerStyle}>
