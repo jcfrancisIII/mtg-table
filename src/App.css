@@ -27,7 +27,6 @@
   text-align: center;
   flex: 1;
   position: relative;
-  cursor: pointer;
   /* optimized for a max 10 players */
   min-width: 20%;
 }
