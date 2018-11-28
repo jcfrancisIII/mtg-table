@@ -48,6 +48,11 @@
 
 button {
   cursor: pointer;
+  -webkit-appearance: none;
+  border: 0;
+  outline: 0;
+  text-transform: none;
+  overflow: hidden;
 }
 
 .player-controls,
@@ -58,14 +63,48 @@ button {
   width: 100%;
 }
 
+.player-controls-container,
+.turn-controls-container {
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+}
+
 .player-controls h4,
 .turn-controls h4 {
-  display: inline-block;
   margin: 0 1em;
 }
 
 .chart-wrap {
     height: 400px;
+}
+
+.kill-table {
+    font-size: 11px;
+    width: calc(100% - 10px);
+    table-layout: fixed;
+    text-align: center;
+    margin: 35px 0;
+}
+
+.kill-table .vert {
+    width: 60px;
+    vertical-align: top;
+}
+
+.kill-table .vert span {
+    transform: rotate(-90deg);
+    display: block;
+    position: absolute;
+    left: 10px;
+}
+
+.kill-table td:nth-of-type(2) {
+    padding-left: 4%
+}
+
+.kill-table td:last-of-type {
+    padding-right: 5%
 }
 
 /* REACT-POPUP */

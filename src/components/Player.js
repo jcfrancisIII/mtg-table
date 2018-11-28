@@ -39,7 +39,7 @@ export default class Player extends Component {
     
     if (this.state.isEditingName && this.props.showPlayerControls ) {
       return (
-        <input className="player-name" defaultValue={name} type="text" onChange={this.setName.bind(this)} onBlur={this.setEditName.bind(this, false)} autoFocus />
+        <input className="player-name" type="text" onChange={this.setName.bind(this)} onBlur={this.setEditName.bind(this, false)} autoFocus />
       )
     }
 

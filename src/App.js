@@ -303,8 +303,8 @@ export default class App extends Component {
     }; // receiving player
     
     const initLifeEffect = { // set to player number in damage[player number].lifeEffect
-      plus: 0,
-      minus: 0,
+      healing: 0,
+      damage: 0,
       kill: false,
       player: {}
     }; //active player

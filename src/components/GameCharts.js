@@ -6,18 +6,25 @@ export default class GameCharts extends Component {
   // total the effect on other players (plus life, minus life, kill?)
   // {healing: 0, damage: 0, kill: false}
   // 
-  dmgData() {
+  getName(player) {
+    let altNumber = player.numb + 1;
+    let altName = ['Player', altNumber].join(' ');
+    player.name = player.name === '' ? altName : player.name;
+    return player.name;
+  }
+
+  playerTotals() {
     const players = this.props.gameData.players;
     const turns = this.props.gameData.turns;
     players.forEach((thisPlayer, i, arr) => {
-      thisPlayer.name = thisPlayer.name === '' ? 'Player ' + thisPlayer.numb: '';
       let thisPlayerNumber = thisPlayer.numb;
+      thisPlayer.name = this.getName(thisPlayer);
       thisPlayer.damage = 0;
       thisPlayer.healing = 0;
       thisPlayer.kills = 0;
       thisPlayer.dmgTo = players.map((obj, i) => { 
         return {
-          name: obj['name'],
+          name: this.getName(obj),
           numb: obj['numb'],
           color: obj['color'],
           damage: 0,
@@ -43,17 +50,44 @@ export default class GameCharts extends Component {
     return players;
   }
 
+  renderKills() {
+    let data = this.playerTotals();
+    let killTds = data.map((player) => {
+      return (
+        <td>{player.kills}</td>
+      )
+    });
+    let nameTds = data.map((player) => {
+      return (
+        <td>{player.name}</td>
+      )
+    })
+    return (
+      <table className="kill-table">
+        <tr>
+          <td className="vert">
+            <span>Kills</span>
+          </td>
+          {killTds}
+        </tr>
+        <tr>
+          <td></td>
+          {nameTds}
+        </tr>
+      </table>
+    )
+  }
+
   render() {
     return (
       <div className="chart-wrap">
         Charts
-        {console.log(this.dmgData())}
         <ResponsiveBar 
-          data={this.dmgData()}
+          data={this.playerTotals()}
           indexBy="name"
           margin={{
               "top": 50,
-              "right": 130,
+              "right": 10,
               "bottom": 50,
               "left": 60
           }}
@@ -84,11 +118,11 @@ export default class GameCharts extends Component {
           keys={["damage"]}
         />
         <ResponsiveBar 
-          data={this.dmgData()}
+          data={this.playerTotals()}
           indexBy="name"
           margin={{
               "top": 50,
-              "right": 130,
+              "right": 10,
               "bottom": 50,
               "left": 60
           }}
@@ -118,6 +152,7 @@ export default class GameCharts extends Component {
           animate={false}
           keys={["healing"]}
         />
+        {this.renderKills()}
       </div>
     );
   }
