@@ -6,19 +6,8 @@ import GameCharts from './components/GameCharts';
 import Popup from 'react-popup';
 import './App.css';
 
-const initPlayerDmg = { // set to player number in currentTurn.damage
-  player: {}, 
-  lifeEffect: {},
-}; // receiving player
-
-const initLifeEffect = { // set to player number in damage[player number].lifeEffect
-  plus: 0,
-  minus: 0,
-  kill: false,
-  player: {}
-}; //active player
-
 export default class App extends Component {
+  
   constructor(props) {
     super(props);
     
@@ -310,6 +299,19 @@ export default class App extends Component {
   }
 
   createPlayersDmg(state) {
+    
+    const initPlayerDmg = { // set to player number in currentTurn.damage
+      player: {}, 
+      lifeEffect: {},
+    }; // receiving player
+    
+    const initLifeEffect = { // set to player number in damage[player number].lifeEffect
+      plus: 0,
+      minus: 0,
+      kill: false,
+      player: {}
+    }; //active player
+
     const players = [...state.players];
     // add damage trackers for each player
     const playersDmg = {};
