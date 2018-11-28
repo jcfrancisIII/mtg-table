@@ -15,14 +15,14 @@ export default class App extends Component {
       players: [],
       currentPlayer: {
         name: '',
-        number: 0,
+        numb: 0,
         life: 20,
         color: '#ff5722',
         active: false
       },
       turns: [],
       currentTurn: {
-        damage: {} // damage
+        damageData: {} // damage
       }, // currentTurn
       showPlayerControls: true,
       showTurnControls: false,
@@ -37,7 +37,7 @@ export default class App extends Component {
     this.setState((state) => {
       return {
         currentTurn: {
-          damage: playersDmg
+          damageData: playersDmg
         },
         showPlayerControls: false,
         showTurnControls: true
@@ -53,7 +53,7 @@ export default class App extends Component {
         players: newPlayers,
         currentPlayer: {
           ...this.state.currentPlayer,
-          number: this.state.currentPlayer.number >= 1 ? this.state.currentPlayer.number-1 : 0
+          numb: this.state.currentPlayer.numb >= 1 ? this.state.currentPlayer.numb-1 : 0
         }
       }
     });
@@ -65,7 +65,7 @@ export default class App extends Component {
         players: [...state.players, state.currentPlayer],
         currentPlayer: {
           ...state.currentPlayer,
-          number: state.currentPlayer.number+1
+          numb: state.currentPlayer.numb+1
         }
       }
     });
@@ -122,7 +122,7 @@ export default class App extends Component {
   }
 
   setLife(newLife, i) {
-    // i is receivingPlayer.number
+    // i is receivingPlayer.numb
     // create new players array
     const receivingPlayer = {
       ...this.state.players[i],
@@ -135,10 +135,10 @@ export default class App extends Component {
     // assign new lifeEffect to the receiving player
     const activePlayer = this.findActivePlayer(this.state);
     const lifeDiff = this.state.players[i].life - newLife;
-    // if lifeDiff > 0 they lost life (minus) 
-    // if lifeDiff < 0 they gained life (plus)
-    const activeLifeEffect = {...this.state.currentTurn.damage[receivingPlayer.number].lifeEffect[activePlayer.number]};
-    lifeDiff > 0 ? activeLifeEffect.minus += Math.abs(lifeDiff) : activeLifeEffect.plus += Math.abs(lifeDiff);
+    // if lifeDiff > 0 they lost life
+    // if lifeDiff < 0 they gained life
+    const activeLifeEffect = {...this.state.currentTurn.damageData[receivingPlayer.numb].lifeEffect[activePlayer.numb]};
+    lifeDiff > 0 ? activeLifeEffect.damage += Math.abs(lifeDiff) : activeLifeEffect.healing += Math.abs(lifeDiff);
     activeLifeEffect.kill = newLife <= 0 ? true : false;
     activeLifeEffect.player = activePlayer;
 
@@ -153,13 +153,13 @@ export default class App extends Component {
       return {
         players: newPlayers,
         currentTurn: {
-          damage: {
-            ...state.currentTurn.damage,
+          damageData: {
+            ...state.currentTurn.damageData,
             [i]: {
               player: receivingPlayer,
               lifeEffect: {
-                ...state.currentTurn.damage[i].lifeEffect,
-                [activePlayer.number]: activeLifeEffect
+                ...state.currentTurn.damageData[i].lifeEffect,
+                [activePlayer.numb]: activeLifeEffect
               }
             }
           }
@@ -207,7 +207,7 @@ export default class App extends Component {
           state.currentTurn
         ],
         currentTurn: {
-          damage: playersDmg
+          damageData: playersDmg
         }
       }
     });
@@ -285,10 +285,7 @@ export default class App extends Component {
           showLifeControls={showLifeControls}
           style={playerListStyle}
         />
-        <GameCharts
-          gameData={this.state}
-          showGameCharts={this.state.showGameCharts}
-        />
+        {this.state.showGameCharts && <GameCharts gameData={this.state} />}
       </main>
     );
   }
@@ -320,7 +317,7 @@ export default class App extends Component {
     // reduce returns result to the next call 
     // {} is initial value
     const playersLA = players.reduce((map, o) => {
-      map[o.number] = initLifeEffect;
+      map[o.numb] = initLifeEffect;
       return map;
     }, {});
 
@@ -329,7 +326,7 @@ export default class App extends Component {
       playerDmg.player = o;
       playerDmg.lifeEffect = playersLA; // players life effect to this player
       // set an object containing the 
-      playersDmg[o.number] = playerDmg
+      playersDmg[o.numb] = playerDmg
     });
 
     return playersDmg;

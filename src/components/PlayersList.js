@@ -7,7 +7,7 @@ export default class PlayerList extends Component {
     return this.props.players.map((player,i) => {
       return (
         <Player 
-          key={player.number} 
+          key={player.numb} 
           player={player} 
 
           controlLife={this.props.controlLife} 

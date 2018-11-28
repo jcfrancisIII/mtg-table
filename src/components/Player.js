@@ -15,12 +15,12 @@ export default class Player extends Component {
   }
   
   minus(e) {
-    const i = this.props.player.number;
+    const i = this.props.player.numb;
     this.props.controlLife('minus', i);
   }
   
   plus(e) {    
-    const i = this.props.player.number;
+    const i = this.props.player.numb;
     this.props.controlLife('plus', i);
   }
   
@@ -31,11 +31,11 @@ export default class Player extends Component {
   }
   
   setName(e) {
-    this.props.setName(e.target.value, this.props.player.number);
+    this.props.setName(e.target.value, this.props.player.numb);
   }
   
   renderName() {
-    const name = this.props.player.name ? this.props.player.name : 'Player ' + (this.props.player.number + 1);
+    const name = this.props.player.name ? this.props.player.name : 'Player ' + (this.props.player.numb + 1);
     
     if (this.state.isEditingName && this.props.showPlayerControls ) {
       return (
@@ -57,7 +57,7 @@ export default class Player extends Component {
 
   setLife(e) {
     this.setEditLife(false, e);
-    this.props.setLife(e.target.value, this.props.player.number);
+    this.props.setLife(e.target.value, this.props.player.numb);
   }
   
   renderLife() {    
@@ -88,12 +88,13 @@ export default class Player extends Component {
   }
 
   setColor(color, e) {
-    this.props.setColor(color.hex, this.props.player.number);
+    this.props.setColor(color.hex, this.props.player.numb);
     this.setEditColor(false, e);
   }
 
   renderColor() {
-    if (this.state.isEditingColor) {
+    // this.props.showPlayerControls makes color picker only visible before start
+    if (this.state.isEditingColor && this.props.showPlayerControls) {
       return (
         <CirclePicker
           className="player-color"
@@ -105,21 +106,21 @@ export default class Player extends Component {
           onChangeComplete={ this.setColor.bind(this) }
         />
       )
+    } else if (this.props.showPlayerControls) {
+      return (
+        <button 
+          className="player-color" 
+          onClick={this.setEditColor.bind(this, true)}
+          style={this.props.playerControlsStyle}
+        >
+          &#x22ee;
+        </button>
+      )
     }
-    
-    return (
-      <button 
-        className="player-color" 
-        onClick={this.setEditColor.bind(this, true)}
-        style={this.props.playerControlsStyle}
-      >
-        &#x22ee;
-      </button>
-    )
   }
 
   setActive() {
-    this.props.setActive(this.props.player.number);
+    this.props.setActive(this.props.player.numb);
   }
 
   render() {
@@ -131,7 +132,7 @@ export default class Player extends Component {
       display: this.props.showLifeControls ? 'block': 'none'
     };
     const activeControlsStyle = {
-      display: this.props.showPlayerControls ? 'none': 'block'
+      display: this.props.showPlayerControls || this.props.player.active ? 'none': 'block'
     };
     return (
       <li className="flex-item" style={playerStyle}>
