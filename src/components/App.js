@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import AddPlayerControls from './components/AddPlayerControls'
-import PlayerList from './components/PlayersList'
-import TurnControls from './components/TurnControls'
-import GameCharts from './components/GameCharts'
+import AddPlayerControls from './AddPlayerControls'
+import PlayerList from './PlayersList'
+import TurnControls from './TurnControls'
+import GameCharts from './GameCharts'
 import Popup from 'react-popup'
 import './App.css'
 
