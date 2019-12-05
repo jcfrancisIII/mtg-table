@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import AddPlayerControls from './AddPlayerControls'
 import PlayerList from './PlayersList'
 import TurnControls from './TurnControls'
 import GameCharts from './GameCharts'
+import Test from './Test'
 import Popup from 'react-popup'
 import '../styles/App.css'
 export default class App extends Component {
@@ -298,7 +299,7 @@ export default class App extends Component {
                     showLifeControls={showLifeControls}
                     style={playerListStyle}
                 />
-                <Home />
+                <Test />
                 {this.state.showGameCharts && (
                     <GameCharts gameData={this.state} />
                 )}
