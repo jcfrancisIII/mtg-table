@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.7.1",
     "@nivo/bar": "^0.51.5",
     "react": "^16.6.1",
     "react-color": "^2.14.1",
