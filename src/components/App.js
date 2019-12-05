@@ -4,27 +4,7 @@ import PlayerList from './PlayersList'
 import TurnControls from './TurnControls'
 import GameCharts from './GameCharts'
 import Popup from 'react-popup'
-import './App.css'
-
-// store
-import reducer from './state/reducers/index'
-
-// SAGAS TEST component
-const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) => (
-    <div>
-        <button onClick={onIncrementAsync}>Increment after 1 second</button>{' '}
-        <button onClick={onIncrement}>Increment</button>{' '}
-        <button onClick={onDecrement}>Decrement</button>
-        <hr />
-        <div>Clicked: {value} times</div>
-    </div>
-)
-Counter.propTypes = {
-    value: PropTypes.number.isRequired,
-    onIncrement: PropTypes.func.isRequired,
-    onDecrement: PropTypes.func.isRequired
-}
-
+import '../styles/App.css'
 export default class App extends Component {
     constructor(props) {
         super(props)
@@ -318,12 +298,7 @@ export default class App extends Component {
                     showLifeControls={showLifeControls}
                     style={playerListStyle}
                 />
-                <Counter
-                    value={store.getState()}
-                    onIncrement={() => action('INCREMENT')}
-                    onDecrement={() => action('DECREMENT')}
-                    onIncrementAsync={() => action('INCREMENT_ASYNC')}
-                />
+                <Home />
                 {this.state.showGameCharts && (
                     <GameCharts gameData={this.state} />
                 )}

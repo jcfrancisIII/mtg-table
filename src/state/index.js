@@ -1,13 +1,12 @@
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
-import { helloSaga } from 'sagas'
-import reducer from 'reducers/index'
+import reducer from './reducers/index'
+import mySaga from './sagas'
 
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(reducer, applyMiddleware(sagaMiddleware))
-sagaMiddleware.run(helloSaga)
 
-const action = type => store.dispatch({ type })
+export const store = createStore(reducer, applyMiddleware(sagaMiddleware))
+sagaMiddleware.run(mySaga)
 
-// rest unchanged
+// render the application
