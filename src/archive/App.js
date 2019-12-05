@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import AddPlayerControls from './components/AddPlayerControls'
 import PlayerList from './components/PlayersList'
 import TurnControls from './components/TurnControls'
@@ -7,11 +7,11 @@ import Popup from 'react-popup'
 import './App.css'
 
 // store
-import reducer from './state/reducers/index'
+import { action } from './store/actions'
 
 // SAGAS TEST component
 const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) => (
-    <div>
+    <div style={{ display: 'block', position: 'fixed', right: 0, top: 0 }}>
         <button onClick={onIncrementAsync}>Increment after 1 second</button>{' '}
         <button onClick={onIncrement}>Increment</button>{' '}
         <button onClick={onDecrement}>Decrement</button>
@@ -19,11 +19,6 @@ const Counter = ({ value, onIncrement, onDecrement, onIncrementAsync }) => (
         <div>Clicked: {value} times</div>
     </div>
 )
-Counter.propTypes = {
-    value: PropTypes.number.isRequired,
-    onIncrement: PropTypes.func.isRequired,
-    onDecrement: PropTypes.func.isRequired
-}
 
 export default class App extends Component {
     constructor(props) {
@@ -319,7 +314,7 @@ export default class App extends Component {
                     style={playerListStyle}
                 />
                 <Counter
-                    value={store.getState()}
+                    value={this.props.counter}
                     onIncrement={() => action('INCREMENT')}
                     onDecrement={() => action('DECREMENT')}
                     onIncrementAsync={() => action('INCREMENT_ASYNC')}
