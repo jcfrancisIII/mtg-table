@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { CirclePicker } from 'react-color'
+import Card from '@material-ui/core/Card'
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 
 export default class Player extends Component {
     constructor(props) {
@@ -175,7 +175,7 @@ export default class Player extends Component {
                     : 'block'
         }
         return (
-            <li className="flex-item" style={playerStyle}>
+            <Card style={playerStyle}>
                 {this.renderName()}
                 {this.renderLife()}
                 {this.renderColor()}
@@ -197,7 +197,7 @@ export default class Player extends Component {
                 >
                     Active
                 </Button>
-            </li>
+            </Card>
         )
     }
 }

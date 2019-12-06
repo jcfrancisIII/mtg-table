@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
+import { styled } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+
+const MyToolbar = styled(Toolbar)({
+    color: '#ffffff'
+})
 
 export default class AddPlayerControls extends Component {
     start() {
@@ -18,20 +26,30 @@ export default class AddPlayerControls extends Component {
 
     render() {
         return (
-            <AppBar className="player-controls" style={this.props.style}>
-                <Toolbar className="player-controls-container">
-                    <Typography variant="h3" component="h3">
+            <AppBar
+                position="fixed"
+                color="primary"
+                className="player-controls"
+                style={this.props.style}
+            >
+                <MyToolbar>
+                    <Typography variant="h6" component="h1">
                         Set the # of Players
                     </Typography>
-                    <Button onClick={this.minus.bind(this)}>-</Button>
-                    <Button onClick={this.plus.bind(this)}>+</Button>
+                    <IconButton onClick={this.minus.bind(this)} color="inherit">
+                        <Icon>remove</Icon>
+                    </IconButton>
+                    <IconButton onClick={this.plus.bind(this)} color="inherit">
+                        <Icon>add</Icon>
+                    </IconButton>
                     <Button
                         style={{ float: 'right' }}
                         onClick={this.start.bind(this)}
+                        color="inherit"
                     >
                         Start
                     </Button>
-                </Toolbar>
+                </MyToolbar>
             </AppBar>
         )
     }
