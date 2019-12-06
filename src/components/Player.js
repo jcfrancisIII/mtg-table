@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { CirclePicker } from 'react-color'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 
 export default class Player extends Component {
     constructor(props) {
@@ -177,24 +179,24 @@ export default class Player extends Component {
                 {this.renderName()}
                 {this.renderLife()}
                 {this.renderColor()}
-                <button
+                <Button
                     style={lifeControlsStyle}
                     onClick={this.minus.bind(this)}
                 >
                     -
-                </button>
-                <button
+                </Button>
+                <Button
                     style={lifeControlsStyle}
                     onClick={this.plus.bind(this)}
                 >
                     +
-                </button>
-                <button
+                </Button>
+                <Button
                     style={activeControlsStyle}
                     onClick={this.setActive.bind(this)}
                 >
                     Active
-                </button>
+                </Button>
             </li>
         )
     }

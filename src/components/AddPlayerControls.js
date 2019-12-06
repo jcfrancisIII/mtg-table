@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import AppBar from '@material-ui/core/AppBar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 
 export default class AddPlayerControls extends Component {
     start() {
@@ -15,19 +18,21 @@ export default class AddPlayerControls extends Component {
 
     render() {
         return (
-            <div className="player-controls" style={this.props.style}>
-                <div className="player-controls-container">
-                    <h4>Set the # of Players</h4>
-                    <button onClick={this.minus.bind(this)}>-</button>
-                    <button onClick={this.plus.bind(this)}>+</button>
-                    <button
+            <AppBar className="player-controls" style={this.props.style}>
+                <Toolbar className="player-controls-container">
+                    <Typography variant="h3" component="h3">
+                        Set the # of Players
+                    </Typography>
+                    <Button onClick={this.minus.bind(this)}>-</Button>
+                    <Button onClick={this.plus.bind(this)}>+</Button>
+                    <Button
                         style={{ float: 'right' }}
                         onClick={this.start.bind(this)}
                     >
                         Start
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                </Toolbar>
+            </AppBar>
         )
     }
 }

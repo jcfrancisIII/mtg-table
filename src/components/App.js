@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import Popup from 'react-popup'
+import Container from '@material-ui/core/Container'
+
 import AddPlayerControls from './AddPlayerControls'
 import PlayerList from './PlayersList'
 import TurnControls from './TurnControls'
 import GameCharts from './GameCharts'
 import Test from './Test'
-import Popup from 'react-popup'
 import '../styles/App.css'
+
 export default class App extends Component {
     constructor(props) {
         super(props)
@@ -275,7 +278,7 @@ export default class App extends Component {
         }
 
         return (
-            <main className="main-container">
+            <Container>
                 <Popup />
                 <AddPlayerControls
                     controlPlayers={this.controlPlayers.bind(this)}
@@ -303,7 +306,7 @@ export default class App extends Component {
                 {this.state.showGameCharts && (
                     <GameCharts gameData={this.state} />
                 )}
-            </main>
+            </Container>
         )
     }
 
