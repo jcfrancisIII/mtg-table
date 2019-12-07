@@ -5,8 +5,15 @@ import App from './App'
 import { Provider } from 'react-redux'
 import { store } from '../store/index'
 
+// marerial theme
+import { ThemeProvider } from '@material-ui/core'
+import { createMuiTheme } from '@material-ui/core/styles'
+const defaultTheme = createMuiTheme()
+
 export default () => (
     <Provider store={store}>
-        <App />
+        <ThemeProvider theme={defaultTheme}>
+            <App />
+        </ThemeProvider>
     </Provider>
 )

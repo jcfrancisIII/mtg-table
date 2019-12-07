@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Popup from 'react-popup'
-import Container from '@material-ui/core/Container'
+import { styled } from '@material-ui/core'
 
 import AddPlayerControls from './AddPlayerControls'
 import PlayerList from './PlayersList'
@@ -8,6 +8,11 @@ import TurnControls from './TurnControls'
 import GameCharts from './GameCharts'
 import Test from './Test'
 import '../styles/App.css'
+
+const StyledAddPlayerControls = styled(AddPlayerControls)`
+    color: red;
+    margin-bottom: ${props => props.theme.spacing(0, 0, 3)};
+`
 
 export default class App extends Component {
     constructor(props) {
@@ -278,9 +283,9 @@ export default class App extends Component {
         }
 
         return (
-            <Container>
+            <main>
                 <Popup />
-                <AddPlayerControls
+                <StyledAddPlayerControls
                     controlPlayers={this.controlPlayers.bind(this)}
                     start={this.start.bind(this)}
                     style={playerControlsStyle}
@@ -306,7 +311,7 @@ export default class App extends Component {
                 {this.state.showGameCharts && (
                     <GameCharts gameData={this.state} />
                 )}
-            </Container>
+            </main>
         )
     }
 

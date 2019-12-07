@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { styled } from '@material-ui/core'
+import React from 'react'
+import { makeStyles } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -7,50 +7,67 @@ import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 
-const MyToolbar = styled(Toolbar)({
-    color: '#ffffff'
-})
+const useStyles = makeStyles(theme => ({
+    root: {},
+    appBar: {},
+    appBarItem: {
+        margin: theme.spacing(0, 0, 0, 3),
+        backgroundColor: theme.palette.primary.dark,
+        color: '#fff'
+    },
+    appBarStart: {
+        backgroundColor: theme.palette.secondary.main
+    }
+}))
 
-export default class AddPlayerControls extends Component {
-    start() {
-        this.props.start()
+export default function AddPlayerControls(props) {
+    const classes = useStyles()
+
+    const start = () => {
+        props.start()
     }
 
-    minus() {
-        this.props.controlPlayers('minus')
+    const minus = () => {
+        props.controlPlayers('minus')
     }
 
-    plus() {
-        this.props.controlPlayers('plus')
+    const plus = () => {
+        props.controlPlayers('plus')
     }
 
-    render() {
-        return (
-            <AppBar
-                position="fixed"
-                color="primary"
-                className="player-controls"
-                style={this.props.style}
-            >
-                <MyToolbar>
-                    <Typography variant="h6" component="h1">
-                        Set the # of Players
-                    </Typography>
-                    <IconButton onClick={this.minus.bind(this)} color="inherit">
-                        <Icon>remove</Icon>
-                    </IconButton>
-                    <IconButton onClick={this.plus.bind(this)} color="inherit">
-                        <Icon>add</Icon>
-                    </IconButton>
-                    <Button
-                        style={{ float: 'right' }}
-                        onClick={this.start.bind(this)}
-                        color="inherit"
-                    >
-                        Start
-                    </Button>
-                </MyToolbar>
-            </AppBar>
-        )
-    }
+    return (
+        <AppBar
+            position="fixed"
+            color="primary"
+            className={classes.appBar}
+            style={props.style}
+        >
+            <Toolbar>
+                <Typography variant="h6" component="h1">
+                    Set the # of Players
+                </Typography>
+                <IconButton
+                    onClick={minus.bind(this)}
+                    className={classes.appBarItem}
+                    size="small"
+                >
+                    <Icon>remove</Icon>
+                </IconButton>
+                <IconButton
+                    onClick={plus.bind(this)}
+                    className={`${classes.appBarItem} ${classes.appBarIcon}`}
+                    size="small"
+                >
+                    <Icon>add</Icon>
+                </IconButton>
+                <Button
+                    onClick={start.bind(this)}
+                    color="inherit"
+                    className={`${classes.appBarItem} ${classes.appBarStart}`}
+                >
+                    Start
+                </Button>
+            </Toolbar>
+        </AppBar>
+    )
 }
