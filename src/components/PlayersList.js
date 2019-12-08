@@ -7,7 +7,7 @@ export default class PlayerList extends Component {
     renderPlayers() {
         return this.props.players.map((player, i) => {
             return (
-                <Grid item>
+                <Grid item key={player.numb}>
                     <Player
                         key={player.numb}
                         player={player}

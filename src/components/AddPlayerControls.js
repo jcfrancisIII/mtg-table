@@ -16,7 +16,10 @@ const useStyles = makeStyles(theme => ({
         color: '#fff'
     },
     appBarStart: {
-        backgroundColor: theme.palette.secondary.main
+        backgroundColor: theme.palette.secondary.main,
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.dark
+        }
     }
 }))
 

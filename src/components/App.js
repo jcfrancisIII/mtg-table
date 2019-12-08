@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Popup from 'react-popup'
 import { styled } from '@material-ui/core'
 
@@ -14,141 +14,134 @@ const StyledAddPlayerControls = styled(AddPlayerControls)`
     margin-bottom: ${props => props.theme.spacing(0, 0, 3)};
 `
 
-export default class App extends Component {
-    constructor(props) {
-        super(props)
+export default function App(props) {
+    const [store, setValues] = useState({
+        players: [],
+        currentPlayer: {
+            name: '',
+            numb: 0,
+            life: 20,
+            color: '#ff5722',
+            active: false
+        },
+        turns: [],
+        currentTurn: {
+            damageData: {} // damage
+        }, // currentTurn
+        showPlayerControls: true,
+        showTurnControls: false,
+        showGameCharts: false
+    })
 
-        this.state = {
-            players: [],
-            currentPlayer: {
-                name: '',
-                numb: 0,
-                life: 20,
-                color: '#ff5722',
-                active: false
-            },
-            turns: [],
+    const start = () => {
+        const playersDmg = createPlayersDmg(store)
+
+        setValues({
+            ...store,
             currentTurn: {
-                damageData: {} // damage
-            }, // currentTurn
-            showPlayerControls: true,
-            showTurnControls: false,
-            showGameCharts: false
-        }
-    }
-
-    start() {
-        const playersDmg = this.createPlayersDmg(this.state)
-
-        this.setState(state => {
-            return {
-                currentTurn: {
-                    damageData: playersDmg
-                },
-                showPlayerControls: false,
-                showTurnControls: true
-            }
+                damageData: playersDmg
+            },
+            showPlayerControls: false,
+            showTurnControls: true
         })
     }
 
-    removePlayer() {
+    const removePlayer = () => {
         // returns a new array
-        const newPlayers = this.state.players.slice(0, -1)
-        this.setState(state => {
-            return {
-                players: newPlayers,
-                currentPlayer: {
-                    ...this.state.currentPlayer,
-                    numb:
-                        this.state.currentPlayer.numb >= 1
-                            ? this.state.currentPlayer.numb - 1
-                            : 0
-                }
+        const newPlayers = store.players.slice(0, -1)
+        setValues({
+            ...store,
+            players: newPlayers,
+            currentPlayer: {
+                ...store.currentPlayer,
+                numb:
+                    store.currentPlayer.numb >= 1
+                        ? store.currentPlayer.numb - 1
+                        : 0
             }
         })
     }
 
-    addPlayer() {
-        this.setState(state => {
-            return {
-                players: [...state.players, state.currentPlayer],
-                currentPlayer: {
-                    ...state.currentPlayer,
-                    numb: state.currentPlayer.numb + 1
-                }
+    const addPlayer = () => {
+        setValues({
+            ...store,
+            players: [...store.players, store.currentPlayer],
+            currentPlayer: {
+                ...store.currentPlayer,
+                numb: store.currentPlayer.numb + 1
             }
         })
     }
 
-    controlPlayers(action, playerIndex) {
+    const controlPlayers = (action, playerIndex) => {
         switch (action) {
             case 'minus':
-                this.removePlayer(playerIndex)
+                removePlayer(playerIndex)
                 break
             case 'plus':
-                this.addPlayer(playerIndex)
+                addPlayer(playerIndex)
                 break
             default:
-                console.log('Error in' + this.name)
+                console.log('Error in' + playerIndex)
         }
     }
 
-    minusLife(i) {
-        const newLife = parseInt(this.state.players[i].life) - 1
-        this.setLife(newLife, i)
+    const minusLife = i => {
+        const newLife = parseInt(store.players[i].life) - 1
+        setLife(newLife, i)
     }
 
-    plusLife(i) {
-        const newLife = parseInt(this.state.players[i].life) + 1
-        this.setLife(newLife, i)
+    const plusLife = i => {
+        const newLife = parseInt(store.players[i].life) + 1
+        setLife(newLife, i)
     }
 
-    controlLife(action, i) {
+    const controlLife = (action, i) => {
         switch (action) {
             case 'minus':
-                this.minusLife(i)
+                minusLife(i)
                 break
             case 'plus':
-                this.plusLife(i)
+                plusLife(i)
                 break
             default:
-                console.log('Error in' + this.name)
+                console.log('Error in' + i)
         }
     }
 
-    setName(newName, i) {
+    const setName = (newName, i) => {
         const newPlayer = {
-            ...this.state.players[i],
+            ...store.players[i],
             name: newName
         }
-        const newPlayers = [...this.state.players]
+        const newPlayers = [...store.players]
         newPlayers[i] = newPlayer
-        this.setState(state => {
-            return {
-                players: newPlayers
-            }
+        setValues({
+            ...store,
+            players: newPlayers
         })
     }
 
-    setLife(newLife, i) {
+    const setLife = (newLife, i) => {
         // i is receivingPlayer.numb
         // create new players array
         const receivingPlayer = {
-            ...this.state.players[i],
+            ...store.players[i],
             life: parseInt(newLife)
         }
         // wrap to create new obj
-        const newPlayers = [...this.state.players]
+        const newPlayers = [...store.players]
         newPlayers[i] = receivingPlayer
 
         // assign new lifeEffect to the receiving player
-        const activePlayer = this.findActivePlayer(this.state)
-        const lifeDiff = this.state.players[i].life - newLife
+        const activePlayer = findActivePlayer(store)
+        const lifeDiff = store.players[i].life - newLife
         // if lifeDiff > 0 they lost life
         // if lifeDiff < 0 they gained life
         const activeLifeEffect = {
-            ...this.state.currentTurn.damageData[receivingPlayer.numb]
-                .lifeEffect[activePlayer.numb]
+            ...store.currentTurn.damageData[receivingPlayer.numb].lifeEffect[
+                activePlayer.numb
+            ]
         }
         lifeDiff > 0
             ? (activeLifeEffect.damage += Math.abs(lifeDiff))
@@ -160,24 +153,23 @@ export default class App extends Component {
         // possibly need to stop life from going down past zero
         // depending on how to track lethal damage does it count past the player's remaining life?
         if (
-            parseInt(newLife) > this.state.players[i].life &&
-            this.state.players[i].life <= 0
+            parseInt(newLife) > store.players[i].life &&
+            store.players[i].life <= 0
         ) {
             Popup.alert("Life can't go up from 0!")
         }
 
-        this.setState(state => {
-            return {
-                players: newPlayers,
-                currentTurn: {
-                    damageData: {
-                        ...state.currentTurn.damageData,
-                        [i]: {
-                            player: receivingPlayer,
-                            lifeEffect: {
-                                ...state.currentTurn.damageData[i].lifeEffect,
-                                [activePlayer.numb]: activeLifeEffect
-                            }
+        setValues({
+            ...store,
+            players: newPlayers,
+            currentTurn: {
+                damageData: {
+                    ...store.currentTurn.damageData,
+                    [i]: {
+                        player: receivingPlayer,
+                        lifeEffect: {
+                            ...store.currentTurn.damageData[i].lifeEffect,
+                            [activePlayer.numb]: activeLifeEffect
                         }
                     }
                 }
@@ -185,49 +177,48 @@ export default class App extends Component {
         })
     }
 
-    setColor(setColor, i) {
+    const setColor = (setColor, i) => {
         const newPlayer = {
-            ...this.state.players[i],
+            ...store.players[i],
             color: setColor
         }
-        const newPlayers = [...this.state.players]
+        const newPlayers = [...store.players]
         newPlayers[i] = newPlayer
-        this.setState({
+        setValues({
+            ...store,
             players: newPlayers
         })
     }
 
-    setActive(i) {
+    const setActive = i => {
         const newPlayer = {
-            ...this.state.players[i],
-            active: this.state.players[i].active ? false : true
+            ...store.players[i],
+            active: store.players[i].active ? false : true
         }
-        const newPlayers = this.state.players.map(x => {
+        const newPlayers = store.players.map(x => {
             return { ...x, active: false }
         })
         newPlayers[i] = newPlayer
 
-        this.setState(state => {
-            return {
-                players: newPlayers
+        setValues({
+            ...store,
+            players: newPlayers
+        })
+    }
+
+    const nextTurn = () => {
+        const playersDmg = createPlayersDmg(store)
+
+        setValues({
+            ...store,
+            turns: [...store.turns, store.currentTurn],
+            currentTurn: {
+                damageData: playersDmg
             }
         })
     }
 
-    nextTurn() {
-        const playersDmg = this.createPlayersDmg(this.state)
-
-        this.setState(state => {
-            return {
-                turns: [...state.turns, state.currentTurn],
-                currentTurn: {
-                    damageData: playersDmg
-                }
-            }
-        })
-    }
-
-    endGame() {
+    const endGame = () => {
         Popup.create({
             content: 'Are you sure?',
             buttons: {
@@ -243,14 +234,13 @@ export default class App extends Component {
                     {
                         text: 'Yes',
                         action: () => {
-                            this.setState(state => {
-                                return {
-                                    turns: [...state.turns, state.currentTurn],
-                                    currentTurn: {
-                                        damage: {}
-                                    },
-                                    showGameCharts: true
-                                }
+                            setValues({
+                                ...store,
+                                turns: [...store.turns, store.currentTurn],
+                                currentTurn: {
+                                    damage: {}
+                                },
+                                showGameCharts: true
                             })
                             Popup.close()
                         }
@@ -260,67 +250,14 @@ export default class App extends Component {
         })
     }
 
-    render() {
-        const turnControlsStyle = {
-            display:
-                this.state.showTurnControls && !this.state.showGameCharts
-                    ? 'block'
-                    : 'none'
-        }
-        const playerControlsStyle = {
-            display:
-                this.state.showPlayerControls && !this.state.showGameCharts
-                    ? 'block'
-                    : 'none'
-        }
-        const showLifeControls =
-            this.state.showTurnControls &&
-            typeof this.findActivePlayer(this.state) === 'object'
-                ? true
-                : false
-        const playerListStyle = {
-            display: !this.state.showGameCharts ? 'flex' : 'none'
-        }
-
-        return (
-            <main>
-                <Popup />
-                <StyledAddPlayerControls
-                    controlPlayers={this.controlPlayers.bind(this)}
-                    start={this.start.bind(this)}
-                    style={playerControlsStyle}
-                />
-                <TurnControls
-                    nextTurn={this.nextTurn.bind(this)}
-                    endGame={this.endGame.bind(this)}
-                    turnsNumber={this.state.turns.length + 1}
-                    style={turnControlsStyle}
-                />
-                <PlayerList
-                    players={this.state.players}
-                    controlLife={this.controlLife.bind(this)}
-                    setName={this.setName.bind(this)}
-                    setLife={this.setLife.bind(this)}
-                    setColor={this.setColor.bind(this)}
-                    setActive={this.setActive.bind(this)}
-                    showPlayerControls={this.state.showPlayerControls}
-                    showLifeControls={showLifeControls}
-                    style={playerListStyle}
-                />
-                <Test />
-                {this.state.showGameCharts && (
-                    <GameCharts gameData={this.state} />
-                )}
-            </main>
-        )
-    }
-
     // utility methods
-    findActivePlayer(state) {
-        return state.players.find(e => e.active === true)
+    const findActivePlayer = store => {
+        return store.players
+            ? store.players.find(e => e.active === true)
+            : false
     }
 
-    createPlayersDmg(state) {
+    const createPlayersDmg = store => {
         const initPlayerDmg = {
             // set to player number in currentTurn.damage
             player: {},
@@ -335,7 +272,7 @@ export default class App extends Component {
             player: {}
         } //active player
 
-        const players = [...state.players]
+        const players = [...store.players]
         // add damage trackers for each player
         const playersDmg = {}
         const playerDmg = initPlayerDmg
@@ -357,4 +294,51 @@ export default class App extends Component {
 
         return playersDmg
     }
+    // end utility methods
+
+    const turnControlsStyle = {
+        display:
+            store.showTurnControls && !store.showGameCharts ? 'block' : 'none'
+    }
+    let playerControlsStyle = {
+        display:
+            store.showPlayerControls && !store.showGameCharts ? 'block' : 'none'
+    }
+    const showLifeControls =
+        store.showTurnControls && typeof findActivePlayer(store) === 'object'
+            ? true
+            : false
+    const playerListStyle = {
+        display: !store.showGameCharts ? 'flex' : 'none'
+    }
+
+    return (
+        <main>
+            <Popup />
+            <StyledAddPlayerControls
+                controlPlayers={controlPlayers.bind(this)}
+                start={start.bind(this)}
+                style={playerControlsStyle}
+            />
+            <TurnControls
+                nextTurn={nextTurn.bind(this)}
+                endGame={endGame.bind(this)}
+                turnsNumber={store.turns && store.turns.length + 1}
+                style={turnControlsStyle}
+            />
+            <PlayerList
+                players={store.players}
+                controlLife={controlLife.bind(this)}
+                setName={setName.bind(this)}
+                setLife={setLife.bind(this)}
+                setColor={setColor.bind(this)}
+                setActive={setActive.bind(this)}
+                showPlayerControls={store.showPlayerControls}
+                showLifeControls={showLifeControls}
+                style={playerListStyle}
+            />
+            <Test />
+            {store.showGameCharts && <GameCharts gameData={store} />}
+        </main>
+    )
 }
