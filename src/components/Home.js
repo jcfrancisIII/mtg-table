@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import { requestHelloWorld } from '../store/actions'
+import DbList from './DbList'
 
 class Home extends React.Component {
     componentDidMount() {
@@ -10,7 +12,13 @@ class Home extends React.Component {
     }
 
     render() {
-        return <h1>a {this.props.helloWorld}</h1>
+        return (
+            <React.Fragment>
+                <CssBaseline />
+                <DbList />
+                <h1>a {this.props.helloWorld}</h1>
+            </React.Fragment>
+        )
     }
 }
 

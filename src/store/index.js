@@ -1,12 +1,17 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
 import reducer from './reducers/index'
-import mySaga from './sagas'
+import { watchAll } from './sagas'
 
 const sagaMiddleware = createSagaMiddleware()
 
-export const store = createStore(reducer, applyMiddleware(sagaMiddleware))
-sagaMiddleware.run(mySaga)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+export const store = createStore(
+    reducer,
+    composeEnhancers(applyMiddleware(sagaMiddleware))
+)
+sagaMiddleware.run(watchAll)
 
 // render the application
